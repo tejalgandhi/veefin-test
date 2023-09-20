@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.3.0-dev+20230110.d1e616d68c
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 02, 2023 at 09:01 AM
--- Server version: 8.0.25
--- PHP Version: 8.1.13
+-- Generation Time: Sep 20, 2023 at 02:21 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `veefin_test`
+-- Database: `veefin`
 --
 
 -- --------------------------------------------------------
@@ -58,10 +58,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
 (4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(5, '2023_08_02_060739_create_users_verify_table', 2),
-(7, '2023_08_02_070501_add_socialite_column_to_users_table', 3),
-(8, '2023_08_02_074806_create_permission_tables', 4),
-(9, '2023_08_02_075047_create_products_table', 5);
+(5, '2023_08_02_060739_create_users_verify_table', 1),
+(6, '2023_08_02_070501_add_socialite_column_to_users_table', 1),
+(7, '2023_08_02_074806_create_permission_tables', 1),
+(12, '2023_08_02_075047_create_products_table', 2),
+(13, '2019_05_03_000001_create_customer_columns', 3),
+(14, '2019_05_03_000002_create_subscriptions_table', 3),
+(15, '2019_05_03_000003_create_subscription_items_table', 3),
+(16, '2023_09_20_134544_create_payment_cards_table', 4);
 
 -- --------------------------------------------------------
 
@@ -92,10 +96,9 @@ CREATE TABLE `model_has_roles` (
 --
 
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
-(1, 'App\\Models\\User', 5),
-(2, 'App\\Models\\User', 6),
-(3, 'App\\Models\\User', 7),
-(3, 'App\\Models\\User', 8);
+(1, 'App\\Models\\User', 10),
+(2, 'App\\Models\\User', 11),
+(3, 'App\\Models\\User', 12);
 
 -- --------------------------------------------------------
 
@@ -108,6 +111,37 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_cards`
+--
+
+CREATE TABLE `payment_cards` (
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cvc` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exp_month` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exp_year` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last4` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_default` enum('0','1') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment_cards`
+--
+
+INSERT INTO `payment_cards` (`id`, `user_id`, `token`, `cvc`, `exp_month`, `exp_year`, `last4`, `is_default`, `created_at`, `updated_at`) VALUES
+(1, 12, 'card_1NsR4PSHWLlj7PDaiw6tS4Q7', NULL, '11', '2024', '5556', '0', '2023-09-20 08:38:03', '2023-09-20 08:38:03'),
+(2, 12, 'card_1NsR57SHWLlj7PDaFXpSh8Zg', NULL, '11', '2024', '4444', '0', '2023-09-20 08:38:46', '2023-09-20 08:38:46'),
+(3, 12, 'card_1NsR82SHWLlj7PDaIwHUCdS4', NULL, '11', '2024', '4444', '0', '2023-09-20 08:41:48', '2023-09-20 08:41:48'),
+(4, 12, 'card_1NsR9CSHWLlj7PDaHBOPLKmd', NULL, '11', '2024', '4444', '0', '2023-09-20 08:43:00', '2023-09-20 08:43:00'),
+(5, 12, 'card_1NsRAISHWLlj7PDaoEXvYVvr', NULL, '11', '2024', '4444', '0', '2023-09-20 08:44:07', '2023-09-20 08:44:07'),
+(6, 12, 'card_1NsRCMSHWLlj7PDaAl6Dn5tm', NULL, '11', '2023', '4242', '0', '2023-09-20 08:46:16', '2023-09-20 08:46:16');
 
 -- --------------------------------------------------------
 
@@ -128,18 +162,18 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'role-list', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(2, 'role-create', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(3, 'role-edit', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(4, 'role-delete', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(5, 'product-list', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(6, 'product-create', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(7, 'product-edit', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(8, 'product-delete', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(9, 'user-list', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(10, 'user-create', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(11, 'user-edit', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16'),
-(12, 'user-delete', 'web', '2023-08-02 03:26:16', '2023-08-02 03:26:16');
+(1, 'role-list', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(2, 'role-create', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(3, 'role-edit', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(4, 'role-delete', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(5, 'product-list', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(6, 'product-create', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(7, 'product-edit', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(8, 'product-delete', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(9, 'user-list', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(10, 'user-create', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(11, 'user-edit', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01'),
+(12, 'user-delete', 'web', '2023-09-19 11:51:01', '2023-09-19 11:51:01');
 
 -- --------------------------------------------------------
 
@@ -167,8 +201,11 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `products` (
   `id` bigint UNSIGNED NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double(8,2) NOT NULL,
   `detail` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_by` bigint NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -177,8 +214,9 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `detail`, `created_at`, `updated_at`) VALUES
-(1, 'ad', 'ssdad', '2023-08-02 03:14:46', '2023-08-02 03:14:46');
+INSERT INTO `products` (`id`, `image`, `name`, `price`, `detail`, `created_by`, `created_at`, `updated_at`) VALUES
+(3, 'products/16951910233.jpg', 'test12', 12.00, 'hjgdsa', 8, '2023-09-20 00:53:43', '2023-09-20 00:53:43'),
+(4, 'products/169521274036.jpg', 'Test bdasbf', 40.00, 'Test bdasbf', 11, '2023-09-20 06:55:40', '2023-09-20 06:55:40');
 
 -- --------------------------------------------------------
 
@@ -199,9 +237,9 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'super-admin', 'web', '2023-08-02 03:26:18', '2023-08-02 03:26:18'),
-(2, 'admin', 'web', '2023-08-02 03:26:18', '2023-08-02 03:26:18'),
-(3, 'user', 'web', '2023-08-02 03:26:19', '2023-08-02 03:26:19');
+(1, 'super-admin', 'web', '2023-09-20 06:51:20', '2023-09-20 06:51:20'),
+(2, 'company', 'web', '2023-09-20 06:51:20', '2023-09-20 06:51:20'),
+(3, 'user', 'web', '2023-09-20 06:51:20', '2023-09-20 06:51:20');
 
 -- --------------------------------------------------------
 
@@ -235,14 +273,44 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (6, 2),
 (7, 2),
 (8, 2),
-(9, 2),
-(10, 2),
-(11, 2),
-(12, 2),
-(5, 3),
-(6, 3),
-(7, 3),
-(8, 3);
+(5, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscriptions`
+--
+
+CREATE TABLE `subscriptions` (
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_price` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL,
+  `ends_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscription_items`
+--
+
+CREATE TABLE `subscription_items` (
+  `id` bigint UNSIGNED NOT NULL,
+  `subscription_id` bigint UNSIGNED NOT NULL,
+  `stripe_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_product` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -261,19 +329,21 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_email_verified` tinyint(1) NOT NULL DEFAULT '0',
   `facebook_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `google_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stripe_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pm_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pm_last_four` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `trial_ends_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `is_email_verified`, `facebook_id`, `google_id`) VALUES
-(4, 'tejal', 'tejal1@yopmail.com', NULL, '$2y$10$cGC12x4azFf9ZYb5XIyTK.use/HC8baO9xUBO85EselbUrD2NitpG', NULL, '2023-08-02 03:06:05', '2023-08-02 03:06:22', 1, NULL, NULL),
-(5, 'Super Admin', 'superadmin@yopmail.com', NULL, '$2y$10$0LAZNMB/KZExGb9nITe54uJWOgq.gM6ZGRzaUH9mPPIqQLSvHvMdS', NULL, '2023-08-02 03:26:18', '2023-08-02 03:26:18', 0, NULL, NULL),
-(6, 'Admin', 'admin@yopmail.com', NULL, '$2y$10$u0.bysk1d.MPy6ztSnyYK.G0xRqW0IBb2OjVBnXNOVOcPOtvNNAMG', NULL, '2023-08-02 03:26:18', '2023-08-02 03:26:18', 0, NULL, NULL),
-(7, 'user', 'user@yopmail.com', NULL, '$2y$10$gj/9IMWw1FAKRPPaL04jo.kpZTVcj.vqnyh8li4sVNR/ymkc9Be.m', NULL, '2023-08-02 03:26:19', '2023-08-02 03:26:19', 0, NULL, NULL),
-(8, 'tejal', 'tejal@yopmail.com', NULL, '$2y$10$H0H7w7mpZ2ZXdCM5pS6gR.X7Vla2DUyqsSe2Nc4868/z9V3FrMKby', NULL, '2023-08-02 03:26:50', '2023-08-02 03:27:05', 1, NULL, NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `is_email_verified`, `facebook_id`, `google_id`, `stripe_id`, `pm_type`, `pm_last_four`, `trial_ends_at`) VALUES
+(10, 'admin', 'admin@yopmail.com', NULL, '$2y$10$nF.iAbLF7dEobUtWoX4VQu2YR2KSaztP9DcsraFiNzWOdJN5v6oxu', NULL, '2023-09-20 06:51:20', '2023-09-20 06:51:20', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, 'company', 'company@yopmail.com', NULL, '$2y$10$kGkNNVyryS10r/6HjDV0wOOcD023OtGQ/wr/oheK.TaXTLNUCyRoq', NULL, '2023-09-20 06:51:20', '2023-09-20 06:51:20', 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 'user', 'user@yopmail.com', NULL, '$2y$10$yNEw/n/UbZSE1wdnYQilXeKnZihQQAw6ARRLQKKXtdjSZz2GhkFjy', NULL, '2023-09-20 06:51:20', '2023-09-20 08:23:46', 0, NULL, NULL, 'cus_OfmPdYUTmnpo3z', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -294,20 +364,10 @@ CREATE TABLE `users_verify` (
 --
 
 INSERT INTO `users_verify` (`id`, `user_id`, `token`, `created_at`, `updated_at`) VALUES
-(1, 4, 'SmbEtHvH8RTtAK18lNBHplgyq2ykJH8wpcxI7gW74U8Bn1GsL2IDiF0AnPfyIBGr', '2023-08-02 00:54:56', '2023-08-02 00:54:56'),
-(2, 5, 'DQajKHVa5f2XOrykTHDcIMXuler8k5lpOoPf1kbzoz85DCvzjNCY5M2iKhwqfQLi', '2023-08-02 00:55:35', '2023-08-02 00:55:35'),
-(3, 6, '64oL8aQ3bDV52CmP1oWQPOn3fHMIMOoNh0t2TNaliwVL7Qd440t0WjxEKD2KnnYZ', '2023-08-02 00:56:03', '2023-08-02 00:56:03'),
-(4, 7, '098lG5JegHI1hc1UhB3xPxJoc4XXdheMEeKhaBL3XBBUudpRBLGmlbTN90g3JdqO', '2023-08-02 00:59:06', '2023-08-02 00:59:06'),
-(5, 8, 'Qt4BqzN1b9YKNnAR5cYTZOuiAlFvuzpGqCOUqw6fLsxfFeVaqcI9pAGms2vlEf3w', '2023-08-02 00:59:38', '2023-08-02 00:59:38'),
-(6, 9, '1IndmmgEsKUUN40FDdiBPpnoBvQ7ML6Nu5lihHWKB6jzGGw5yXRQE8hF4XWmACkD', '2023-08-02 01:00:03', '2023-08-02 01:00:03'),
-(7, 11, 'IrtnjsFTKCFeNXYqDvjI6WHAeJSo4trlFMaSNV1wicXwS5PxZOnSXU12hUCPVVzu', '2023-08-02 01:26:16', '2023-08-02 01:26:16'),
-(8, 12, 'HH1eQ7wYHcgVqexGV5w4l9mqIqHlo0Wvz8YS2lndYy1njUnysBiMDoo6L4CkSsGC', '2023-08-02 01:53:02', '2023-08-02 01:53:02'),
-(9, 12, 'vLnJitGdyN26GHTGSqSdpwhybrTCE8GLlGOK4n0lh9tjR9qvsEkqoWaTlLO9Bg4L', '2023-08-02 01:53:06', '2023-08-02 01:53:06'),
-(10, 4, '560UniUsRh6LISrh6yJZDU02WKU4VEFX1YuvxibUhhcZVbGBept4LMJ10WGXCr3z', '2023-08-02 03:06:05', '2023-08-02 03:06:05'),
-(11, 4, 'eD6Do5mcijMIiyBff1wHb0haLdTcE2DRKJN4taCJGMX8O8XS2QGSInNObbTDrjTR', '2023-08-02 03:06:10', '2023-08-02 03:06:10'),
-(12, 1, 'shfZs30Ldra8LFEcsgewpZx409aNrW0Klj5sBWG8hCaVqTKajtwDMLrSKSYcJJkK', '2023-08-02 03:15:13', '2023-08-02 03:15:13'),
-(13, 8, 'v8wn5eyuvxWYvOT1iqLbDSGHbNZNUkOyYv2fhzODxWueqWeLL8g2nZq3SBhYIsd5', '2023-08-02 03:26:50', '2023-08-02 03:26:50'),
-(14, 8, 'VwFFtCK1VzHvSER7N8Hbb41DYgeAOWm0POZUEL9WzGTRckFUZBIt8wCKJGL3csbN', '2023-08-02 03:26:54', '2023-08-02 03:26:54');
+(1, 1, 'vUZCgOebR7WXkOzmGdzGUVIaoxcGemXdcPU9nof2reQVclyWfGsSnzYXXcjDKAr6', '2023-09-19 11:54:10', '2023-09-19 11:54:10'),
+(2, 1, 'qROxT2Av58prGfQ7Fca3jWFFCBTBKLlD2iQX0gVuVCYKksHqMTyAxYICOdwtGDos', '2023-09-19 11:55:18', '2023-09-19 11:55:18'),
+(3, 2, 'fdobfzKDjBez2J2Xvtg1QWtHbCdcLiMT9NDxGJcf0f5gQTgbMxqOi9WTgJLnlKbK', '2023-09-19 12:08:31', '2023-09-19 12:08:31'),
+(4, 8, 'L9BvaBkc54Uu6BTSCEYg7okxA7Pt4X1wRRieEq0ySFmu1e0Te90VwhzxwHLesdHo', '2023-09-20 00:15:45', '2023-09-20 00:15:45');
 
 --
 -- Indexes for dumped tables
@@ -347,6 +407,12 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
+-- Indexes for table `payment_cards`
+--
+ALTER TABLE `payment_cards`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `permissions`
 --
 ALTER TABLE `permissions`
@@ -382,11 +448,28 @@ ALTER TABLE `role_has_permissions`
   ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
+-- Indexes for table `subscriptions`
+--
+ALTER TABLE `subscriptions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `subscriptions_stripe_id_unique` (`stripe_id`),
+  ADD KEY `subscriptions_user_id_stripe_status_index` (`user_id`,`stripe_status`);
+
+--
+-- Indexes for table `subscription_items`
+--
+ALTER TABLE `subscription_items`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `subscription_items_subscription_id_stripe_price_unique` (`subscription_id`,`stripe_price`),
+  ADD UNIQUE KEY `subscription_items_stripe_id_unique` (`stripe_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_stripe_id_index` (`stripe_id`);
 
 --
 -- Indexes for table `users_verify`
@@ -408,7 +491,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `payment_cards`
+--
+ALTER TABLE `payment_cards`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -426,7 +515,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -435,16 +524,28 @@ ALTER TABLE `roles`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `subscriptions`
+--
+ALTER TABLE `subscriptions`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subscription_items`
+--
+ALTER TABLE `subscription_items`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users_verify`
 --
 ALTER TABLE `users_verify`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

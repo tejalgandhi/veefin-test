@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['auth', 'is_verify_email']);
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['auth']);
 Route::get('account/verify/{token}', [AuthController::class, 'verifyAccount'])->name('user.verify');
 
 
@@ -38,4 +38,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
+    Route::get('buy-product/{product}', [ProductController::class, 'getBuyProduct'])->name('buy-product.get');
+    Route::post('buy-product', [ProductController::class, 'buyProduct'])->name('buy-product.post');
 });

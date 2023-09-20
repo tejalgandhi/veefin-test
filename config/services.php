@@ -39,5 +39,7 @@ return [
         'client_secret' =>  env ( 'G_CLIENT_SECRET' ),
         'redirect' =>  env ( 'G_REDIRECT' )
     ],
-
+    'stripe' => [
+        'secret' => env('STRIPE_SECRET'),
+    ],
 ];

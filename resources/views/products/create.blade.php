@@ -2,14 +2,13 @@
 
 
 @section('content')
+
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
                 <h2>Add New Product</h2>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('products.index') }}"> Back</a>
-            </div>
+
         </div>
     </div>
 
@@ -26,11 +25,17 @@
     @endif
 
 
-    <form action="{{ route('products.store') }}" method="POST">
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
 
         <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Image:</strong>
+                    <input type="file" name="image" class="custom-file-input" id="chooseFile">
+                </div>
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Name:</strong>
@@ -43,7 +48,14 @@
                     <textarea class="form-control" style="height:150px" name="detail" placeholder="Detail"></textarea>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Price:</strong>
+                    <input type="number" name="price" class="form-control" placeholder="Price">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 text-center p-2">
+                    <a class="btn btn-primary" href="{{ route('products.index') }}"> Back</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>

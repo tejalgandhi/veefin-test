@@ -63,14 +63,14 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
-                                <div class="flex items-center justify-end mt-4">
-                                    <a class="btn btn-primary" href="{{ url('auth/facebook') }}" style="margin-top: 0px !important;background: blue;color: #ffffff;padding: 5px;border-radius:7px;" id="btn-fblogin">
-                                        <i class="fa fa-facebook-square" aria-hidden="true"></i> Login with Facebook
-                                    </a>
-                                    <a href="{{ route('auth.google') }}">
-                                        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" style="margin-left: 3em;">
-                                    </a>
-                                </div>
+{{--                                <div class="flex items-center justify-end mt-4">--}}
+{{--                                    <a class="btn btn-primary" href="{{ url('auth/facebook') }}" style="margin-top: 0px !important;background: blue;color: #ffffff;padding: 5px;border-radius:7px;" id="btn-fblogin">--}}
+{{--                                        <i class="fa fa-facebook-square" aria-hidden="true"></i> Login with Facebook--}}
+{{--                                    </a>--}}
+{{--                                    <a href="{{ route('auth.google') }}">--}}
+{{--                                        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" style="margin-left: 3em;">--}}
+{{--                                    </a>--}}
+{{--                                </div>--}}
                             </div>
 
                         </div>
