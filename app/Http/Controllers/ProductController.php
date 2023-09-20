@@ -168,6 +168,8 @@ class ProductController extends Controller
 
 
             $system_card = PaymentCard::create([
+                'user_id' => Auth::user()->id,
+                'product_id' => $request->id,
                 'token' => $card->id,
                 'is_default' => '1',
                 'brand' => $card->brand,
@@ -188,6 +190,7 @@ class ProductController extends Controller
 
             $system_card = PaymentCard::create([
                 'user_id' => Auth::user()->id,
+                'product_id' => $request->id,
                 'token' => $card->id,
                 'is_default' => '0',
                 'brand' => $card->brand,

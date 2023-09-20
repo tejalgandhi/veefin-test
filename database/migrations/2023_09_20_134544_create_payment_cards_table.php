@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('payment_cards', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
+            $table->bigInteger('product_id');
             $table->string('token')->nullable();
             $table->string('cvc')->nullable();
             $table->string('exp_month')->nullable();
